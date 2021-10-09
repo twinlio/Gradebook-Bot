@@ -5,7 +5,7 @@ app = Flask('')
 
 @app.route('/')
 def home():
-    return 'https://github.com/twinlio/ILY-Bot'
+    return 'https://github.com/twinlio/Gradebook-Bot'
 
 def run():
   app.run(host='0.0.0.0',port=8080)

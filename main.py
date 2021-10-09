@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import requests
 from lxml import html
 import hmac, hashlib, base64
@@ -57,6 +56,7 @@ def login(user,pw):
 
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.Game(name='!help'))
     print(client.user)
 
 @client.command()
@@ -74,19 +74,20 @@ async def setup(ctx, username=None, password=None):
     db["dict_userid:username-password"] = f"{dictionary}"
 
 
-@client.command()
+@client.command(aliases=['mg', 'mygrade'])
 async def mygrades(ctx):
     if ctx.channel.type is not discord.ChannelType.private:
         await ctx.send('You must be on a DM chat to exectue this command')
         return
     dictionary = db["dict_userid:username-password"]
     dictionary = ast.literal_eval(dictionary)
-    if not dictionary[f'{ctx.author.id}']:
+    try:        
+        information = dictionary[f'{ctx.author.id}']
+        username = information[0]  
+        password = information[1]      
+    except KeyError:
         await ctx.send('You do not have a set username and password! Set one up by doing the command !setup <username> <password>')
         return
-    information = dictionary[f'{ctx.author.id}']
-    username = information[0]  
-    password = information[1]      
     list = login(username, password)
     embedVar = discord.Embed(title="Your Grades", description=" ", color=0x00ff00)
     for i in list:
@@ -103,6 +104,22 @@ async def mygrades(ctx):
 @client.command()
 async def pledge(ctx):
     await ctx.send('"I pledge to not look at the database with the information of usernames and passwords or any sort of act that will leak any information such as username, password, grades, etc." - twinlio#3481')
+
+
+@client.command(aliases=['feedback', 'bug'])
+async def github(ctx):
+    await ctx.send('For feedback, bug report, feature request, please visit: https://github.com/twinlio/Gradebook-Bot')
+
+
+client.remove_command('help')
+@client.command()
+async def help(ctx):
+    embedVar = discord.Embed(title="List of Commands", description=" ", color=0x00ff00)
+    embedVar.add_field(name='!mygrades [mg]', value='Get the overall grade for all classes', inline=False)
+    embedVar.add_field(name='!pledge', value="See the owner's pledge", inline=False)
+    embedVar.add_field(name='!github', value="Get the link to the github", inline=False)
+    await ctx.send(embed=embedVar)
+
 
 keep_alive()
 client.run(os.environ['BOTTOKEN'])
