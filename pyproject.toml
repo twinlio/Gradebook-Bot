@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "repl_python3_Gradebook-Bot"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+bs4 = "^0.0.1"
+discord = "^1.7.3"
+lxml = "^4.6.3"
+replit = "^3.2.4"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
