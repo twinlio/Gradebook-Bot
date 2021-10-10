@@ -72,6 +72,7 @@ async def setup(ctx, username=None, password=None):
     dictionary = ast.literal_eval(dictionary)
     dictionary[f"{ctx.author.id}"] = [username, password]
     db["dict_userid:username-password"] = f"{dictionary}"
+    await ctx.send('Your username and password has been saved.')
 
 
 @client.command(aliases=['mg', 'mygrade'])
@@ -119,6 +120,19 @@ async def help(ctx):
     embedVar.add_field(name='!pledge', value="See the owner's pledge", inline=False)
     embedVar.add_field(name='!github', value="Get the link to the github", inline=False)
     await ctx.send(embed=embedVar)
+
+
+@client.command()
+async def membercount(ctx):
+    num = 0
+    if ctx.message.author.id == 299267793759764483:
+        dicti = db["dict_userid:username-password"]
+        dicti = ast.literal_eval(dicti)
+        for i in dicti:
+            num += 1
+        await ctx.send(num)
+    else:
+        await ctx.send('You are not allowed to execute this command!')
 
 
 keep_alive()
